@@ -2,9 +2,11 @@
 
 import SubpageLayout from "@/components/SubpageLayout";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const inputStyle = {
     width: "100%",
@@ -15,6 +17,26 @@ export default function ApplyPage() {
     outline: "none",
     background: "#fff",
   } as const;
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const { error } = await supabase.from("consultations").insert({
+      name: formData.get("name") as string,
+      age: parseInt(formData.get("age") as string) || null,
+      phone: formData.get("phone") as string,
+      loan_type: formData.get("loan_type") as string || null,
+      amount: formData.get("amount") as string || null,
+      message: formData.get("message") as string || null,
+    });
+
+    setLoading(false);
+    if (!error) setSubmitted(true);
+    else alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
+  }
 
   return (
     <SubpageLayout title="대출절차" subtitle="간편하게 대출 상담을 신청하세요">
@@ -29,37 +51,23 @@ export default function ApplyPage() {
               <p style={{ color: "#999" }}>담당자가 빠른 시일 내에 연락드리겠습니다.</p>
             </div>
           ) : (
-            <form
-              onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
-              style={{ background: "#fff", borderRadius: 20, padding: "48px 40px", border: "1px solid #eee" }}
-            >
+            <form onSubmit={handleSubmit} style={{ background: "#fff", borderRadius: 20, padding: "48px 40px", border: "1px solid #eee" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 <div>
-                  <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>
-                    이름 <span style={{ color: "#dc2626" }}>*</span>
-                  </label>
-                  <input type="text" required style={inputStyle} placeholder="이름을 입력하세요" />
+                  <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>이름 <span style={{ color: "#dc2626" }}>*</span></label>
+                  <input name="name" type="text" required style={inputStyle} placeholder="이름을 입력하세요" />
                 </div>
-
                 <div>
-                  <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>
-                    나이 <span style={{ color: "#dc2626" }}>*</span>
-                  </label>
-                  <input type="number" required style={inputStyle} placeholder="나이를 입력하세요" min={20} max={99} />
+                  <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>나이 <span style={{ color: "#dc2626" }}>*</span></label>
+                  <input name="age" type="number" required style={inputStyle} placeholder="나이를 입력하세요" min={20} max={99} />
                 </div>
-
                 <div>
-                  <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>
-                    연락처 <span style={{ color: "#dc2626" }}>*</span>
-                  </label>
-                  <input type="tel" required style={inputStyle} placeholder="010-0000-0000" />
+                  <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>연락처 <span style={{ color: "#dc2626" }}>*</span></label>
+                  <input name="phone" type="tel" required style={inputStyle} placeholder="010-0000-0000" />
                 </div>
-
                 <div>
-                  <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>
-                    대출 종류 <span style={{ color: "#dc2626" }}>*</span>
-                  </label>
-                  <select required style={{ ...inputStyle, appearance: "none" as const }}>
+                  <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>대출 종류 <span style={{ color: "#dc2626" }}>*</span></label>
+                  <select name="loan_type" required style={{ ...inputStyle, appearance: "none" as const }}>
                     <option value="">대출 종류를 선택하세요</option>
                     <option>자동차담보대출</option>
                     <option>전월세담보대출</option>
@@ -69,39 +77,20 @@ export default function ApplyPage() {
                     <option>여성우대대출</option>
                   </select>
                 </div>
-
                 <div>
                   <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>희망 대출금액</label>
-                  <input type="text" style={inputStyle} placeholder="희망 금액을 입력하세요" />
+                  <input name="amount" type="text" style={inputStyle} placeholder="희망 금액을 입력하세요" />
                 </div>
-
                 <div>
                   <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#333", marginBottom: 8 }}>상담 내용</label>
-                  <textarea rows={4} style={{ ...inputStyle, resize: "none" as const }} placeholder="추가 상담 내용을 입력하세요" />
+                  <textarea name="message" rows={4} style={{ ...inputStyle, resize: "none" as const }} placeholder="추가 상담 내용을 입력하세요" />
                 </div>
-
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
                   <input type="checkbox" required id="agree" style={{ marginTop: 4 }} />
-                  <label htmlFor="agree" style={{ fontSize: 12, color: "#999" }}>
-                    개인정보 수집 및 이용에 동의합니다. 수집된 정보는 대출 상담 목적으로만 사용되며, 상담 완료 후 즉시 파기됩니다.
-                  </label>
+                  <label htmlFor="agree" style={{ fontSize: 12, color: "#999" }}>개인정보 수집 및 이용에 동의합니다. 수집된 정보는 대출 상담 목적으로만 사용되며, 상담 완료 후 즉시 파기됩니다.</label>
                 </div>
-
-                <button
-                  type="submit"
-                  style={{
-                    width: "100%",
-                    background: "#1B7D3A",
-                    color: "#fff",
-                    fontWeight: 700,
-                    padding: "18px 0",
-                    borderRadius: 12,
-                    fontSize: 17,
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  대출 상담 신청하기
+                <button type="submit" disabled={loading} style={{ width: "100%", background: loading ? "#999" : "#1B7D3A", color: "#fff", fontWeight: 700, padding: "18px 0", borderRadius: 12, fontSize: 17, border: "none", cursor: loading ? "not-allowed" : "pointer" }}>
+                  {loading ? "신청 중..." : "대출 상담 신청하기"}
                 </button>
               </div>
             </form>
