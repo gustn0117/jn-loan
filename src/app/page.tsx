@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import LoanProducts from "@/components/LoanProducts";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import CtaBanner from "@/components/CtaBanner";
 import LegalDisclosure from "@/components/LegalDisclosure";
@@ -12,7 +11,6 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <HeroSection />
-        <LoanProducts />
         <WhyChooseUs />
         <CtaBanner />
         <LegalDisclosure />

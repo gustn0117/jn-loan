@@ -50,6 +50,63 @@ body {
 
 /* Selection color */
 ::selection {
-  background: rgba(27, 125, 58, 0.15);
-  color: #145C2B;
+  background: rgba(232, 115, 26, 0.15);
+  color: #E8731A;
+}
+
+/* Smooth animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.7s ease-out forwards;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.25);
+}
+
+/* Focus styles */
+input:focus, select:focus, textarea:focus {
+  border-color: #E8731A !important;
+  box-shadow: 0 0 0 3px rgba(232, 115, 26, 0.1) !important;
+  transition: all 0.2s;
+}
+
+/* Button hover effect */
+button:not(:disabled):hover, a.btn-primary:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s;
 }
