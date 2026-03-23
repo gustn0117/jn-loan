@@ -14,6 +14,58 @@ const steps = [
   { num: "06", title: "절차 마무리", icon: "M5 13l4 4L19 7" },
 ];
 
+function PrivacyPolicyDetail() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button type="button" onClick={() => setOpen(true)} style={{
+        background: "none", border: "none", color: "#E8731A", fontSize: 13,
+        fontWeight: 600, cursor: "pointer", textDecoration: "underline", padding: 0,
+      }}>
+        개인정보취급방침 내용보기
+      </button>
+      {open && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }} onClick={() => setOpen(false)}>
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)" }} />
+          <div style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", maxWidth: 600, width: "100%", maxHeight: "80vh", overflowY: "auto", position: "relative", zIndex: 1 }} onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: "#111" }}>개인정보취급방침</h3>
+              <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+                <svg width="24" height="24" fill="none" stroke="#999" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div style={{ fontSize: 14, color: "#555", lineHeight: 2.0 }}>
+              <p style={{ fontWeight: 700, color: "#333", marginBottom: 16 }}>개인(신용)정보 수집·이용동의</p>
+              <p style={{ marginBottom: 16 }}>제이앤대부중개 귀중</p>
+              <p style={{ marginBottom: 16 }}>귀사와의 금융거래와 관련하여 귀사가 본인의 개인(신용)정보를 수집·이용하고자 하는 경우에는 [개인정보 보호법] 제15조, 제22조, [신용정보의 이용 및 보호에 관한 법률] 제32조, 제33조 및 제34조에 따라 동의를 얻어야 합니다.</p>
+              <p style={{ marginBottom: 16 }}>이에 귀사가 아래의 내용과 같이 본인의 개인(신용)정보를 수집·이용하는데 동의합니다.</p>
+              <p style={{ marginBottom: 8 }}>□ 개인(신용)정보의 수집·이용 목적 : 신용대출, 차량담보대출, 주택담보대출 등 대출 상담 및 컨설팅</p>
+              <p style={{ marginBottom: 8 }}>□ 수집, 이용할 개인(신용)정보의 내용 : 이름, 휴대폰번호, 차량번호, 집주소 등</p>
+              <p style={{ marginBottom: 16 }}>□ 개인(신용)정보의 보유·이용 기간 : 거래 종료(채권 채무 관계 종료)일로부터 5년(단, 관련법령의 별도 규정이 명시되어 있는 경우 그 기간을 따름)</p>
+              <p style={{ marginBottom: 24, color: "#999" }}>귀하는 동의를 거부할 권리가 있으나, 동의하지 않으실 경우 거래관계의 설정 또는 유지가 불가능 할 수 있음을 알려드립니다.</p>
+
+              <div style={{ borderTop: "1px solid #eee", paddingTop: 20, marginTop: 8 }}>
+                <p style={{ fontWeight: 700, color: "#333", marginBottom: 16 }}>개인(신용)정보 제공 동의</p>
+                <p style={{ marginBottom: 16 }}>제이앤대부중개 귀중</p>
+                <p style={{ marginBottom: 16 }}>귀사와의 (금융)거래와 관련하여 귀사가 본인으로부터 취득한 개인(신용)정보는 [개인정보 보호법] 제17조, 제22조, [신용정보의 이용 및 보호에 관한 법률] 제32조에 따라 제3자에게 제공할 경우 본인의 사전 동의를 얻어야 하는 정보입니다.</p>
+                <p style={{ marginBottom: 16 }}>이에 본인은 귀사가 본인의 개인(신용)정보를 아래와 같이 제 3자에게 제공하는 것에 대해 동의합니다.</p>
+                <p style={{ marginBottom: 8 }}>□ 개인(신용)정보를 제공받는자 : 귀사와 위탁계약을 체결한 대출모집인 및 금융회사</p>
+                <p style={{ marginBottom: 8 }}>□ 개인(신용)정보 제공목적 : 귀사가 취급하는 금융상품의 상담</p>
+                <p style={{ marginBottom: 8 }}>□ 제공대상 개인(신용)정보 : 이름, 휴대폰번호, e-mail 주소</p>
+                <p style={{ marginBottom: 16 }}>□ 제공받는 자의 개인(신용)정보 보유 및 이용기간 : 제공 동의일로부터 개인(신용)정보를 제공받는 자의 목적을 달성할 때까지</p>
+                <p style={{ color: "#999" }}>귀하는 동의를 거부할 권리가 있으나, 동의하지 않으실 경우 거래관계의 설정 또는 유치가 불가능할 수 있음을 알려드립니다.</p>
+              </div>
+            </div>
+            <div style={{ textAlign: "right", marginTop: 24 }}>
+              <button onClick={() => setOpen(false)} style={{ background: "#f0f0f0", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", color: "#555" }}>닫기</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,7 +99,7 @@ export default function ApplyPage() {
       <main style={{ flex: 1, paddingTop: 72 }}>
         {/* Hero - solid green */}
         <div style={{
-          background: "linear-gradient(135deg, #1B7D3A 0%, #145C2B 50%, #0d4420 100%)",
+          background: "linear-gradient(135deg, #27ae60 0%, #1e8c4c 50%, #15612e 100%)",
           padding: "100px 0 80px", position: "relative", overflow: "hidden",
         }}>
           <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none" }} />
@@ -86,7 +138,7 @@ export default function ApplyPage() {
                   <div style={{
                     width: 80, height: 80, borderRadius: 24,
                     background: "linear-gradient(135deg, rgba(27,125,58,0.08) 0%, rgba(27,125,58,0.03) 100%)",
-                    color: "#1B7D3A", display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#27ae60", display: "flex", alignItems: "center", justifyContent: "center",
                     marginBottom: 20, position: "relative", zIndex: 2,
                     border: "1px solid rgba(27,125,58,0.08)",
                   }}>
@@ -115,7 +167,7 @@ export default function ApplyPage() {
             {submitted ? (
               <div style={{ background: "#fff", borderRadius: 24, padding: "72px 48px", border: "1px solid rgba(0,0,0,0.04)", textAlign: "center", boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}>
                 <div style={{ width: 80, height: 80, borderRadius: 24, background: "rgba(27,125,58,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 28px" }}>
-                  <svg width="40" height="40" fill="none" stroke="#1B7D3A" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  <svg width="40" height="40" fill="none" stroke="#27ae60" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h2 style={{ fontSize: 26, fontWeight: 800, color: "#111", marginBottom: 12 }}>신청이 완료되었습니다</h2>
                 <p style={{ color: "#999" }}>담당자가 빠른 시일 내에 연락드리겠습니다.</p>
@@ -142,20 +194,15 @@ export default function ApplyPage() {
                       <option>개인회생대출</option><option>여성우대대출</option>
                     </select>
                   </div>
-                  <div>
-                    <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>희망 대출금액</label>
-                    <input name="amount" type="text" style={inputStyle} placeholder="희망 금액을 입력하세요" />
-                  </div>
-                  <div>
-                    <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>상담 내용</label>
-                    <textarea name="message" rows={4} style={{ ...inputStyle, resize: "none" as const }} placeholder="추가 상담 내용을 입력하세요" />
-                  </div>
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 10, background: "#f8f9fa", borderRadius: 12, padding: "14px 16px" }}>
                     <input type="checkbox" required id="agree" style={{ marginTop: 3, width: 18, height: 18, accentColor: "#E8731A" }} />
-                    <label htmlFor="agree" style={{ fontSize: 13, color: "#888", lineHeight: 1.6 }}>개인정보 수집 및 이용에 동의합니다. 수집된 정보는 대출 상담 목적으로만 사용되며, 상담 완료 후 즉시 파기됩니다.</label>
+                    <label htmlFor="agree" style={{ fontSize: 13, color: "#888", lineHeight: 1.6 }}>
+                      개인정보 수집 및 이용에 동의합니다.
+                    </label>
                   </div>
+                  <PrivacyPolicyDetail />
                   <button type="submit" disabled={loading} style={{
-                    width: "100%", background: loading ? "#ccc" : "linear-gradient(135deg, #1B7D3A 0%, #145C2B 100%)",
+                    width: "100%", background: loading ? "#ccc" : "linear-gradient(135deg, #27ae60 0%, #1e8c4c 100%)",
                     color: "#fff", fontWeight: 700, padding: "18px 0", borderRadius: 14,
                     fontSize: 17, border: "none", cursor: loading ? "not-allowed" : "pointer",
                     boxShadow: loading ? "none" : "0 4px 16px rgba(27,125,58,0.25)",

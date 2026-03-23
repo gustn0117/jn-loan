@@ -6,12 +6,12 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 const products = [
-  { name: "직장인/사업자대출", limit: "최대 3000만원", rate: "연5%~연20% 이내", period: "1개월~60개월이내", icon: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" },
-  { name: "여성우대대출", limit: "최대 500만원", rate: "연5%~연20% 이내", period: "1개월~60개월이내", icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" },
-  { name: "청년전용대출", limit: "최대 1000만원", rate: "연5%~연20% 이내", period: "1개월~60개월이내", icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" },
-  { name: "무직자대출", limit: "최대 500만원", rate: "연5%~연20% 이내", period: "1개월~60개월이내", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
-  { name: "소액대출", limit: "최대 1000만원", rate: "연5%~연20% 이내", period: "1개월~60개월이내", icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
-  { name: "통신연체대납", limit: "최대 300만원", rate: "연5%~연20% 이내", period: "1개월~60개월이내", icon: "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" },
+  { name: "자동차담보대출", limit: "최대 5,000만원", rate: "연5%~연20% 이내", period: "최대 120개월", icon: "M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" },
+  { name: "전월세담보대출", limit: "최대 1억3천만원", rate: "연20% 이내", period: "최대 60개월", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3" },
+  { name: "무직자 대출", limit: "최대 500만원", rate: "연5%~연20% 이내", period: "1개월~60개월", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
+  { name: "비상금대출", limit: "최대 300만원", rate: "연5%~연20% 이내", period: "1개월~60개월", icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
+  { name: "개인회생대출", limit: "최대 4,000만원", rate: "연20% 이내", period: "최대 60개월", icon: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" },
+  { name: "여성우대대출", limit: "최대 1,000만원", rate: "연20% 이내", period: "최대 60개월", icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" },
 ];
 
 export default function LimitCheckPage() {
@@ -44,7 +44,7 @@ export default function LimitCheckPage() {
       <main style={{ flex: 1, paddingTop: 72 }}>
         {/* Hero */}
         <div style={{
-          background: "linear-gradient(135deg, #1B7D3A 0%, #145C2B 50%, #0d4420 100%)",
+          background: "linear-gradient(135deg, #27ae60 0%, #1e8c4c 50%, #15612e 100%)",
           padding: "80px 0", position: "relative", overflow: "hidden",
         }}>
           <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none" }} />
@@ -110,7 +110,7 @@ export default function LimitCheckPage() {
         <section style={{ padding: "100px 0", background: "#f8f9fa" }}>
           <div style={{ maxWidth: 580, margin: "0 auto", padding: "0 24px" }}>
             <div style={{
-              background: "linear-gradient(135deg, #1B7D3A 0%, #145C2B 100%)",
+              background: "linear-gradient(135deg, #27ae60 0%, #1e8c4c 100%)",
               borderRadius: 24, padding: "44px 40px", marginBottom: 36, textAlign: "center",
               position: "relative", overflow: "hidden",
             }}>
@@ -128,7 +128,7 @@ export default function LimitCheckPage() {
             {submitted ? (
               <div style={{ background: "#fff", borderRadius: 24, padding: "72px 48px", border: "1px solid rgba(0,0,0,0.04)", textAlign: "center", boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}>
                 <div style={{ width: 80, height: 80, borderRadius: 24, background: "rgba(27,125,58,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 28px" }}>
-                  <svg width="40" height="40" fill="none" stroke="#1B7D3A" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  <svg width="40" height="40" fill="none" stroke="#27ae60" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h2 style={{ fontSize: 26, fontWeight: 800, color: "#111", marginBottom: 12 }}>조회 신청이 완료되었습니다</h2>
                 <p style={{ color: "#999" }}>담당자가 확인 후 빠르게 연락드리겠습니다.</p>

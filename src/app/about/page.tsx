@@ -8,7 +8,7 @@ export default function AboutPage() {
       <main style={{ flex: 1, paddingTop: 72 }}>
         {/* Hero banner */}
         <div style={{
-          background: "linear-gradient(135deg, #0a2a1a 0%, #1B7D3A 100%)",
+          background: "linear-gradient(135deg, #0e3520 0%, #27ae60 100%)",
           padding: "100px 0", position: "relative", overflow: "hidden",
         }}>
           <div style={{ position: "absolute", inset: 0, background: "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80') center/cover", opacity: 0.12 }} />

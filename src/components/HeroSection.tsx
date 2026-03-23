@@ -18,7 +18,7 @@ export default function HeroSection() {
   return (
     <section style={{ position: "relative", overflow: "hidden", paddingTop: 72 }}>
       {/* Background layers */}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #0c1f12 0%, #112a18 25%, #0d2214 50%, #091a0e 100%)" }} />
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #0e2515 0%, #112a18 25%, #0d2214 50%, #091a0e 100%)" }} />
       <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/hero-bg.jpg)", backgroundSize: "cover", backgroundPosition: "center", opacity: 0.05 }} />
       {/* Decorative elements */}
       <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(232,115,26,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
@@ -91,24 +91,11 @@ export default function HeroSection() {
                 <span style={{ color: "#E8731A", fontSize: 12, fontWeight: 700 }}>{loanTypes[activeIdx].name}</span>
               </div>
 
-              <h1 style={{
-                color: "#fff", fontSize: "clamp(30px, 4.5vw, 48px)", fontWeight: 800,
-                lineHeight: 1.2, marginBottom: 20, wordBreak: "keep-all", letterSpacing: "-0.03em",
-              }}>
-                일정 수입이 있다면
-                <br />
-                <span style={{ background: "linear-gradient(135deg, #E8731A, #F5923E)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                  신청부터 막힘없이
-                </span>
-                <br />
-                한 번에 가능
-              </h1>
-
-              <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 16, lineHeight: 1.8, marginBottom: 36, wordBreak: "keep-all", maxWidth: 420 }}>
+              <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 16, lineHeight: 1.8, marginBottom: 36, wordBreak: "keep-all", maxWidth: 440 }}>
                 {loanTypes[activeIdx].desc}
               </p>
 
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 48 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                 <Link href="/apply" style={{
                   display: "inline-flex", alignItems: "center", gap: 10,
                   background: "linear-gradient(135deg, #E8731A 0%, #d4650f 100%)",
@@ -120,30 +107,6 @@ export default function HeroSection() {
                   대출 상담 신청
                   <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
-                <a href="tel:010-4077-3837" style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  color: "rgba(255,255,255,0.4)", fontWeight: 500, padding: "16px 24px",
-                  fontSize: 15, textDecoration: "none", border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: 14, transition: "all 0.3s",
-                }}>
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                  010-4077-3837
-                </a>
-              </div>
-
-              {/* Stats */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, paddingTop: 32, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                {[
-                  { value: "연 20%", label: "이내 금리" },
-                  { value: "당일", label: "승인 가능" },
-                  { value: "0원", label: "중개수수료" },
-                  { value: "12~60", label: "개월" },
-                ].map((s) => (
-                  <div key={s.label} style={{ textAlign: "center" }}>
-                    <p style={{ color: "#fff", fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 4 }}>{s.value}</p>
-                    <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, fontWeight: 500 }}>{s.label}</p>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
