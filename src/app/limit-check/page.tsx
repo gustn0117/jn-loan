@@ -14,6 +14,57 @@ const products = [
   { name: "여성우대대출", limit: "최대 1,000만원", rate: "연20% 이내", period: "최대 60개월", icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" },
 ];
 
+function PrivacyModal() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button type="button" onClick={() => setOpen(true)} style={{
+        background: "none", border: "none", color: "#E8731A", fontSize: 13,
+        fontWeight: 600, cursor: "pointer", textDecoration: "underline", padding: 0,
+      }}>
+        개인정보취급방침 내용보기
+      </button>
+      {open && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }} onClick={() => setOpen(false)}>
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)" }} />
+          <div style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", maxWidth: 600, width: "100%", maxHeight: "80vh", overflowY: "auto", position: "relative", zIndex: 1 }} onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: "#111" }}>개인정보취급방침</h3>
+              <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+                <svg width="24" height="24" fill="none" stroke="#999" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div style={{ fontSize: 14, color: "#555", lineHeight: 2.0 }}>
+              <p style={{ fontWeight: 700, color: "#333", marginBottom: 16 }}>개인(신용)정보 수집·이용동의</p>
+              <p style={{ marginBottom: 16 }}>제이앤대부중개 귀중</p>
+              <p style={{ marginBottom: 16 }}>귀사와의 금융거래와 관련하여 귀사가 본인의 개인(신용)정보를 수집·이용하고자 하는 경우에는 [개인정보 보호법] 제15조, 제22조, [신용정보의 이용 및 보호에 관한 법률] 제32조, 제33조 및 제34조에 따라 동의를 얻어야 합니다.</p>
+              <p style={{ marginBottom: 16 }}>이에 귀사가 아래의 내용과 같이 본인의 개인(신용)정보를 수집·이용하는데 동의합니다.</p>
+              <p style={{ marginBottom: 8 }}>□ 개인(신용)정보의 수집·이용 목적 : 신용대출, 차량담보대출, 주택담보대출 등 대출 상담 및 컨설팅</p>
+              <p style={{ marginBottom: 8 }}>□ 수집, 이용할 개인(신용)정보의 내용 : 이름, 휴대폰번호, 차량번호, 집주소 등</p>
+              <p style={{ marginBottom: 16 }}>□ 개인(신용)정보의 보유·이용 기간 : 거래 종료(채권 채무 관계 종료)일로부터 5년(단, 관련법령의 별도 규정이 명시되어 있는 경우 그 기간을 따름)</p>
+              <p style={{ marginBottom: 24, color: "#999" }}>귀하는 동의를 거부할 권리가 있으나, 동의하지 않으실 경우 거래관계의 설정 또는 유지가 불가능 할 수 있음을 알려드립니다.</p>
+              <div style={{ borderTop: "1px solid #eee", paddingTop: 20, marginTop: 8 }}>
+                <p style={{ fontWeight: 700, color: "#333", marginBottom: 16 }}>개인(신용)정보 제공 동의</p>
+                <p style={{ marginBottom: 16 }}>제이앤대부중개 귀중</p>
+                <p style={{ marginBottom: 16 }}>귀사와의 (금융)거래와 관련하여 귀사가 본인으로부터 취득한 개인(신용)정보는 [개인정보 보호법] 제17조, 제22조, [신용정보의 이용 및 보호에 관한 법률] 제32조에 따라 제3자에게 제공할 경우 본인의 사전 동의를 얻어야 하는 정보입니다.</p>
+                <p style={{ marginBottom: 16 }}>이에 본인은 귀사가 본인의 개인(신용)정보를 아래와 같이 제 3자에게 제공하는 것에 대해 동의합니다.</p>
+                <p style={{ marginBottom: 8 }}>□ 개인(신용)정보를 제공받는자 : 귀사와 위탁계약을 체결한 대출모집인 및 금융회사</p>
+                <p style={{ marginBottom: 8 }}>□ 개인(신용)정보 제공목적 : 귀사가 취급하는 금융상품의 상담</p>
+                <p style={{ marginBottom: 8 }}>□ 제공대상 개인(신용)정보 : 이름, 휴대폰번호, e-mail 주소</p>
+                <p style={{ marginBottom: 16 }}>□ 제공받는 자의 개인(신용)정보 보유 및 이용기간 : 제공 동의일로부터 개인(신용)정보를 제공받는 자의 목적을 달성할 때까지</p>
+                <p style={{ color: "#999" }}>귀하는 동의를 거부할 권리가 있으나, 동의하지 않으실 경우 거래관계의 설정 또는 유치가 불가능할 수 있음을 알려드립니다.</p>
+              </div>
+            </div>
+            <div style={{ textAlign: "right", marginTop: 24 }}>
+              <button onClick={() => setOpen(false)} style={{ background: "#f0f0f0", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", color: "#555" }}>닫기</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function LimitCheckPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -161,10 +212,9 @@ export default function LimitCheckPage() {
                     <input type="checkbox" required id="agree-limit" style={{ marginTop: 3, width: 18, height: 18, accentColor: "#E8731A" }} />
                     <label htmlFor="agree-limit" style={{ fontSize: 13, color: "#888", lineHeight: 1.6 }}>
                       개인정보 수집 및 이용에 동의합니다.
-                      {" "}
-                      <a href="#" style={{ color: "#E8731A", fontWeight: 600, textDecoration: "underline" }} onClick={(e) => { e.preventDefault(); alert("개인정보처리방침\n\n수집항목: 이름, 연락처, 나이\n수집목적: 대출 상담 및 한도 조회\n보유기간: 상담 완료 후 즉시 파기\n\n위 개인정보 수집에 동의하지 않으실 수 있으며, 동의하지 않으실 경우 서비스 이용이 제한됩니다."); }}>자세히 보기</a>
                     </label>
                   </div>
+                  <PrivacyModal />
                   <button type="submit" disabled={loading} style={{
                     width: "100%",
                     background: loading ? "#ccc" : "linear-gradient(135deg, #E8731A 0%, #d4650f 100%)",
