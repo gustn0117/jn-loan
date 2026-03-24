@@ -6,12 +6,12 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 const products = [
-  { name: "자동차담보대출", limit: "최대 5,000만원", rate: "연5%~연20% 이내", period: "최대 120개월", icon: "M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" },
-  { name: "전월세담보대출", limit: "최대 1억3천만원", rate: "연20% 이내", period: "최대 60개월", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3" },
-  { name: "무직자 대출", limit: "최대 500만원", rate: "연5%~연20% 이내", period: "1개월~60개월", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
-  { name: "비상금대출", limit: "최대 300만원", rate: "연5%~연20% 이내", period: "1개월~60개월", icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
-  { name: "개인회생대출", limit: "최대 4,000만원", rate: "연20% 이내", period: "최대 60개월", icon: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" },
-  { name: "여성우대대출", limit: "최대 1,000만원", rate: "연20% 이내", period: "최대 60개월", icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" },
+  { name: "자동차담보대출", id: "auto", limit: "최대 5,000만원", rate: "연5%~연20% 이내", period: "최대 120개월", icon: "M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" },
+  { name: "전월세담보대출", id: "rent", limit: "최대 1억3천만원", rate: "연20% 이내", period: "최대 60개월", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3" },
+  { name: "무직자 대출", id: "unemployed", limit: "최대 500만원", rate: "연5%~연20% 이내", period: "1개월~60개월", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
+  { name: "비상금대출", id: "emergency", limit: "최대 300만원", rate: "연5%~연20% 이내", period: "1개월~60개월", icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
+  { name: "개인회생대출", id: "rehabilitation", limit: "최대 4,000만원", rate: "연20% 이내", period: "최대 60개월", icon: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" },
+  { name: "여성우대대출", id: "women", limit: "최대 1,000만원", rate: "연20% 이내", period: "최대 60개월", icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" },
 ];
 
 function PrivacyModal() {
@@ -143,7 +143,7 @@ export default function LimitCheckPage() {
                     ))}
                   </div>
 
-                  <a href="tel:010-4077-3837" style={{
+                  <a href={`/products#${product.id}`} style={{
                     display: "block", textAlign: "center",
                     background: "rgba(232,115,26,0.04)", border: "1.5px solid rgba(232,115,26,0.15)",
                     color: "#E8731A", fontWeight: 700, padding: "13px 0", borderRadius: 12,
