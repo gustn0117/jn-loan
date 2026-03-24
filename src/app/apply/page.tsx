@@ -99,7 +99,7 @@ export default function ApplyPage() {
       <main style={{ flex: 1, paddingTop: 72 }}>
         {/* Hero - solid green */}
         <div style={{
-          background: "linear-gradient(135deg, #27ae60 0%, #1e8c4c 50%, #15612e 100%)",
+          background: "linear-gradient(135deg, #2ecc71 0%, #25a85a 50%, #1e7a3c 100%)",
           padding: "100px 0 80px", position: "relative", overflow: "hidden",
         }}>
           <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none" }} />
@@ -138,7 +138,7 @@ export default function ApplyPage() {
                   <div style={{
                     width: 80, height: 80, borderRadius: 24,
                     background: "linear-gradient(135deg, rgba(27,125,58,0.08) 0%, rgba(27,125,58,0.03) 100%)",
-                    color: "#27ae60", display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#2ecc71", display: "flex", alignItems: "center", justifyContent: "center",
                     marginBottom: 20, position: "relative", zIndex: 2,
                     border: "1px solid rgba(27,125,58,0.08)",
                   }}>
@@ -167,7 +167,7 @@ export default function ApplyPage() {
             {submitted ? (
               <div style={{ background: "#fff", borderRadius: 24, padding: "72px 48px", border: "1px solid rgba(0,0,0,0.04)", textAlign: "center", boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}>
                 <div style={{ width: 80, height: 80, borderRadius: 24, background: "rgba(27,125,58,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 28px" }}>
-                  <svg width="40" height="40" fill="none" stroke="#27ae60" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  <svg width="40" height="40" fill="none" stroke="#2ecc71" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h2 style={{ fontSize: 26, fontWeight: 800, color: "#111", marginBottom: 12 }}>신청이 완료되었습니다</h2>
                 <p style={{ color: "#999" }}>담당자가 빠른 시일 내에 연락드리겠습니다.</p>
@@ -202,7 +202,7 @@ export default function ApplyPage() {
                   </div>
                   <PrivacyPolicyDetail />
                   <button type="submit" disabled={loading} style={{
-                    width: "100%", background: loading ? "#ccc" : "linear-gradient(135deg, #27ae60 0%, #1e8c4c 100%)",
+                    width: "100%", background: loading ? "#ccc" : "linear-gradient(135deg, #2ecc71 0%, #25a85a 100%)",
                     color: "#fff", fontWeight: 700, padding: "18px 0", borderRadius: 14,
                     fontSize: 17, border: "none", cursor: loading ? "not-allowed" : "pointer",
                     boxShadow: loading ? "none" : "0 4px 16px rgba(27,125,58,0.25)",

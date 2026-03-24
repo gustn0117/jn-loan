@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer style={{ background: "#1a2520", color: "#999" }}>
+    <footer style={{ background: "#1c3328", color: "#999" }}>
       <div className="container-main" style={{ paddingTop: 64, paddingBottom: 36 }}>
         {/* Legal disclosure - text style, no boxes */}
         <div style={{ marginBottom: 48, paddingBottom: 40, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>

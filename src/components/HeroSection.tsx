@@ -22,7 +22,7 @@ export default function HeroSection() {
   return (
     <section style={{ position: "relative", overflow: "hidden", paddingTop: 72 }}>
       {/* Background - brighter green */}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #1a3d25 0%, #1e4a2d 25%, #1a3f27 50%, #152f1e 100%)" }} />
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #1f5230 0%, #245e38 25%, #1f5230 50%, #1a4228 100%)" }} />
       <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/hero-bg.jpg)", backgroundSize: "cover", backgroundPosition: "center", opacity: 0.05 }} />
       <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(232,115,26,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "-20%", left: "-10%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(39,174,96,0.06) 0%, transparent 60%)", pointerEvents: "none" }} />
