@@ -54,7 +54,7 @@ export default function LegalDisclosure() {
               <div>
                 <p><span style={{ color: "#444", fontWeight: 700 }}>상호명:</span> 주식회사 제이앤대부전당</p>
                 <p><span style={{ color: "#444", fontWeight: 700 }}>대표자:</span> 박종남</p>
-                <p><span style={{ color: "#444", fontWeight: 700 }}>Tel:</span> 010-4077-3837</p>
+                <p><span style={{ color: "#444", fontWeight: 700 }}>Tel:</span> 010-3935-3837</p>
               </div>
               <div>
                 <p><span style={{ color: "#444", fontWeight: 700 }}>대부업등록번호:</span> 2023-광주 광산-0013</p>

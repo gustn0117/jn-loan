@@ -42,7 +42,7 @@ export default function Footer() {
             <div style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", lineHeight: 2.0 }}>
               <p><span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>상호명:</span> 주식회사 제이앤대부전당</p>
               <p><span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>대표자:</span> 박종남</p>
-              <p><span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>Tel:</span> 010-4077-3837</p>
+              <p><span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>Tel:</span> 010-3935-3837</p>
               <p><span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>대부업등록번호:</span> 2023-광주 광산-0013</p>
               <p><span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>등록기관:</span> 시민경제과 (062-960-3867)</p>
               <p><span style={{ color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>사업자등록번호:</span> 564-88-02984</p>

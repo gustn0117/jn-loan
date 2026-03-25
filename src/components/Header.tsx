@@ -49,7 +49,7 @@ export default function Header() {
           </nav>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <a href="tel:010-4077-3837" className="desktop-nav" style={{
+            <a href="tel:010-3935-3837" className="desktop-nav" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "linear-gradient(135deg, #E8731A 0%, #d4650f 100%)",
               color: "#fff", borderRadius: 10, padding: "11px 24px",
@@ -58,7 +58,7 @@ export default function Header() {
               transition: "all 0.2s",
             }}>
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-              010-4077-3837
+              010-3935-3837
             </a>
             <button className="mobile-menu-btn" style={{ display: "none", padding: 8, border: "none", background: "transparent", cursor: "pointer" }} onClick={() => setMobileOpen(!mobileOpen)}>
               <svg width="24" height="24" fill="none" stroke="#333" viewBox="0 0 24 24">
@@ -80,14 +80,14 @@ export default function Header() {
                   background: "transparent",
                 }} onClick={() => setMobileOpen(false)}>{menu.label}</Link>
               ))}
-              <a href="tel:010-4077-3837" style={{
+              <a href="tel:010-3935-3837" style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 background: "linear-gradient(135deg, #E8731A 0%, #d4650f 100%)",
                 color: "#fff", borderRadius: 12, fontWeight: 700, padding: "16px 20px",
                 fontSize: 16, marginTop: 12, textDecoration: "none",
               }}>
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                010-4077-3837
+                010-3935-3837
               </a>
             </div>
           </div>

@@ -104,7 +104,7 @@ export default function AboutPage() {
                   { label: "사업자등록번호", value: "564-88-02984" },
                   { label: "대부업등록번호", value: "2023-광주 광산-0013" },
                   { label: "등록기관", value: "시민경제과 (062-960-3867)" },
-                  { label: "연락처", value: "010-4077-3837" },
+                  { label: "연락처", value: "010-3935-3837" },
                   { label: "주소", value: "광주광역시 광산구 마항길 43, 201호 (하남동)" },
                   { label: "개업연월일", value: "2023년 08월 11일" },
                 ].map((item, idx) => (
