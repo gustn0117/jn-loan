@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 const loanTypes = [
   { name: "자동차담보대출", headline: "차량이 있다면\n담보 설정으로 유리한 조건", highlight: "담보 설정으로", desc: "차량이 있다면 담보 설정으로 비교적 유리한 조건으로 이용 가능", icon: "M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" },
@@ -14,23 +14,48 @@ const loanTypes = [
 
 export default function HeroSection() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const loan = loanTypes[activeIdx];
 
-  // Split headline to apply highlight color
   const headlineParts = loan.headline.split("\n");
+
+  const inputStyle = {
+    width: "100%", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10,
+    padding: "12px 14px", fontSize: 14, outline: "none",
+    background: "rgba(255,255,255,0.06)", color: "#fff",
+    transition: "all 0.2s",
+  } as const;
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const { error } = await supabase.from("consultations").insert({
+      name: formData.get("name") as string,
+      age: parseInt(formData.get("age") as string) || null,
+      phone: formData.get("phone") as string,
+      loan_type: formData.get("loan_type") as string || null,
+      amount: formData.get("amount") as string || null,
+      message: formData.get("message") as string || null,
+    });
+    setLoading(false);
+    if (!error) setSubmitted(true);
+    else alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
+  }
 
   return (
     <section style={{ position: "relative", overflow: "hidden", paddingTop: 72 }}>
-      {/* Background - brighter green */}
+      {/* Background */}
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #1f5230 0%, #245e38 25%, #1f5230 50%, #1a4228 100%)" }} />
       <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/hero-bg.jpg)", backgroundSize: "cover", backgroundPosition: "center", opacity: 0.05 }} />
       <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(232,115,26,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "-20%", left: "-10%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(39,174,96,0.06) 0%, transparent 60%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none" }} />
 
-      <div className="container-main" style={{ position: "relative", zIndex: 1, paddingTop: 80, paddingBottom: 100 }}>
+      <div className="container-main" style={{ position: "relative", zIndex: 1, paddingTop: 60, paddingBottom: 80 }}>
         <div className="hero-layout">
-          {/* Left side */}
+          {/* Left side - loan tabs + description */}
           <div className="hero-left">
             <div style={{ marginBottom: 28 }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(232,115,26,0.1)", borderRadius: 100, padding: "6px 16px", marginBottom: 16 }}>
@@ -41,7 +66,7 @@ export default function HeroSection() {
                 대출 상품 안내
               </h2>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 32 }}>
               {loanTypes.map((l, idx) => (
                 <button
                   key={idx}
@@ -74,30 +99,16 @@ export default function HeroSection() {
                 </button>
               ))}
             </div>
-          </div>
 
-          {/* Right side - bigger box with headline */}
-          <div className="hero-right">
+            {/* Description area */}
             <div style={{
-              background: "linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
-              borderRadius: 28, padding: "clamp(48px, 6vw, 72px) clamp(40px, 5vw, 64px)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              position: "relative", overflow: "hidden",
-              backdropFilter: "blur(10px)",
-              minHeight: 400,
-              display: "flex", flexDirection: "column", justifyContent: "center",
+              background: "rgba(255,255,255,0.03)", borderRadius: 20,
+              padding: "36px 32px", border: "1px solid rgba(255,255,255,0.06)",
             }}>
-              <div style={{ position: "absolute", top: -60, right: -60, width: 250, height: 250, borderRadius: "50%", background: "radial-gradient(circle, rgba(232,115,26,0.08) 0%, transparent 60%)", pointerEvents: "none" }} />
-
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(232,115,26,0.1)", borderRadius: 100, padding: "6px 14px", marginBottom: 28, alignSelf: "flex-start" }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(232,115,26,0.1)", borderRadius: 100, padding: "5px 12px", marginBottom: 16 }}>
                 <span style={{ color: "#E8731A", fontSize: 12, fontWeight: 700 }}>{loan.name}</span>
               </div>
-
-              {/* Big headline with highlight */}
-              <h1 style={{
-                color: "#fff", fontSize: "clamp(30px, 4.5vw, 46px)", fontWeight: 800,
-                lineHeight: 1.25, marginBottom: 20, wordBreak: "keep-all", letterSpacing: "-0.03em",
-              }}>
+              <h3 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 38px)", fontWeight: 800, lineHeight: 1.3, marginBottom: 16, wordBreak: "keep-all", letterSpacing: "-0.03em" }}>
                 {headlineParts.map((part, i) => {
                   if (part.includes(loan.highlight)) {
                     const before = part.split(loan.highlight)[0];
@@ -113,34 +124,92 @@ export default function HeroSection() {
                   }
                   return <span key={i}>{part}{i < headlineParts.length - 1 && <br />}</span>;
                 })}
-              </h1>
-
-              <p style={{ color: "rgba(255,255,255,0.45)", fontSize: 16, lineHeight: 1.8, marginBottom: 40, wordBreak: "keep-all", maxWidth: 440 }}>
+              </h3>
+              <p style={{ color: "rgba(255,255,255,0.45)", fontSize: 16, lineHeight: 1.8, wordBreak: "keep-all" }}>
                 {loan.desc}
               </p>
+            </div>
+          </div>
 
-              {/* Button centered */}
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <Link href="/apply" style={{
-                  display: "inline-flex", alignItems: "center", gap: 10,
-                  background: "linear-gradient(135deg, #E8731A 0%, #d4650f 100%)",
-                  color: "#fff", fontWeight: 700, padding: "16px 44px", borderRadius: 14,
-                  fontSize: 16, textDecoration: "none", letterSpacing: "0.01em",
-                  boxShadow: "0 4px 20px rgba(232,115,26,0.3)",
-                  transition: "all 0.3s",
-                }}>
-                  대출 상담 신청
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                </Link>
-              </div>
+          {/* Right side - consultation form */}
+          <div className="hero-right">
+            <div style={{
+              background: "rgba(255,255,255,0.04)",
+              borderRadius: 24, padding: "36px 32px",
+              border: "1px solid rgba(255,255,255,0.08)",
+              backdropFilter: "blur(10px)",
+            }}>
+              {submitted ? (
+                <div style={{ textAlign: "center", padding: "40px 0" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(46,204,113,0.15)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+                    <svg width="32" height="32" fill="none" stroke="#2ecc71" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 8 }}>신청이 완료되었습니다</h3>
+                  <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 14 }}>담당자가 빠른 시일 내에 연락드리겠습니다.</p>
+                </div>
+              ) : (
+                <>
+                  <div style={{ textAlign: "center", marginBottom: 28 }}>
+                    <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 6 }}>대출 상담 신청</h3>
+                    <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>간편하게 신청하시면 전문 상담사가 연락드립니다</p>
+                  </div>
+                  <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <div>
+                        <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>이름 *</label>
+                        <input name="name" type="text" required style={inputStyle} placeholder="이름" />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>나이 *</label>
+                        <input name="age" type="number" required style={inputStyle} placeholder="나이" min={20} max={99} />
+                      </div>
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>연락처 *</label>
+                      <input name="phone" type="tel" required style={inputStyle} placeholder="010-0000-0000" />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>대출 종류 *</label>
+                      <select name="loan_type" required style={{ ...inputStyle, appearance: "none" as const }}>
+                        <option value="" style={{ background: "#1a4228" }}>대출 종류를 선택하세요</option>
+                        {loanTypes.map((l, i) => <option key={i} style={{ background: "#1a4228" }}>{l.name}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>희망 대출금액</label>
+                      <input name="amount" type="text" style={inputStyle} placeholder="희망 금액 (선택)" />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>상담 내용</label>
+                      <textarea name="message" rows={2} style={{ ...inputStyle, resize: "none" as const }} placeholder="추가 상담 내용 (선택)" />
+                    </div>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                      <input type="checkbox" required id="hero-agree" style={{ marginTop: 3, accentColor: "#E8731A" }} />
+                      <label htmlFor="hero-agree" style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", lineHeight: 1.5 }}>
+                        개인정보 수집 및 이용에 동의합니다.
+                      </label>
+                    </div>
+                    <button type="submit" disabled={loading} style={{
+                      width: "100%",
+                      background: loading ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #E8731A 0%, #d4650f 100%)",
+                      color: "#fff", fontWeight: 700, padding: "16px 0", borderRadius: 12,
+                      fontSize: 16, border: "none", cursor: loading ? "not-allowed" : "pointer",
+                      boxShadow: loading ? "none" : "0 4px 20px rgba(232,115,26,0.3)",
+                      transition: "all 0.3s", marginTop: 4,
+                    }}>
+                      {loading ? "신청 중..." : "대출 상담 신청하기"}
+                    </button>
+                  </form>
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       <style>{`
-        .hero-layout { display: grid; grid-template-columns: 300px 1fr; gap: 56px; align-items: start; }
-        .hero-left { padding-top: 20px; }
+        .hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 48px; align-items: start; }
+        .hero-left { padding-top: 0; }
         @media (max-width: 960px) {
           .hero-layout { grid-template-columns: 1fr; gap: 32px; }
           .hero-left { order: 2; }
