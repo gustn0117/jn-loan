@@ -54,12 +54,12 @@ export default function HeroSection() {
       <div className="container-main" style={{ position: "relative", zIndex: 1, paddingTop: 60, paddingBottom: 80 }}>
         <div className="hero-3col">
           {/* Left - 목록 */}
-          <div className="hero-col-left">
+          <div className="hero-col-left" style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(232,115,26,0.1)", borderRadius: 100, padding: "6px 16px", marginBottom: 20 }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#E8731A" }} />
               <span style={{ color: "#E8731A", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>LOAN PRODUCTS</span>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1, justifyContent: "center" }}>
               {loanTypes.map((l, idx) => (
                 <button
                   key={idx}
@@ -151,12 +151,13 @@ export default function HeroSection() {
           </div>
 
           {/* Right - 폼 */}
-          <div className="hero-col-right">
+          <div className="hero-col-right" style={{ display: "flex" }}>
             <div style={{
               background: "rgba(255,255,255,0.04)",
               borderRadius: 24, padding: "32px 28px",
               border: "1px solid rgba(255,255,255,0.08)",
               backdropFilter: "blur(10px)",
+              flex: 1, display: "flex", flexDirection: "column", justifyContent: "center",
             }}>
               {submitted ? (
                 <div style={{ textAlign: "center", padding: "40px 0" }}>
@@ -227,7 +228,7 @@ export default function HeroSection() {
       </div>
 
       <style>{`
-        .hero-3col { display: grid; grid-template-columns: 220px minmax(0, 1fr) 340px; gap: 32px; align-items: start; }
+        .hero-3col { display: grid; grid-template-columns: 260px minmax(0, 1fr) 380px; gap: 32px; align-items: stretch; }
         @media (max-width: 1100px) {
           .hero-3col { grid-template-columns: 200px minmax(0, 1fr); gap: 24px; }
           .hero-col-right { grid-column: 1 / -1; max-width: 400px; }
