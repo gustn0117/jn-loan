@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "대출상품 안내",
+  description: "제이앤대부 대출상품 안내. 자동차담보대출, 전월세담보대출, 무직자대출, 비상금대출, 개인회생대출, 여성우대대출. 맞춤 상품으로 당일 승인 가능.",
+};
 
 const products = [
   {

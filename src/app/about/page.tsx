@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "회사소개",
+  description: "제이앤대부 회사소개. 광주광역시 광산구 정식 등록 대부업체. 대표자 박종남, 사업자등록번호 564-88-02984, 대부업등록번호 2023-광주 광산-0013.",
+};
 
 export default function AboutPage() {
   return (
