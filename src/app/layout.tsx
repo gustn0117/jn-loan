@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
   verification: {},
   other: {
-    "naver-site-verification": "630326c09ca15ab0a8ebcf912fe9999df85b8b56",
+    "naver-site-verification": "f0d71b40c0b8e6f62ffa938bc6e1f7897d6c475e",
   },
 };
 
