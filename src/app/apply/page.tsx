@@ -84,6 +84,7 @@ export default function ApplyPage() {
       name: formData.get("name") as string,
       age: parseInt(formData.get("age") as string) || null,
       phone: formData.get("phone") as string,
+      job: formData.get("job") as string || null,
       loan_type: formData.get("loan_type") as string || null,
       amount: formData.get("amount") as string || null,
       message: formData.get("message") as string || null,
@@ -186,6 +187,21 @@ export default function ApplyPage() {
                     </div>
                   ))}
                   <div>
+                    <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>직업 <span style={{ color: "#E8731A" }}>*</span></label>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+                      {["무직자", "직장인", "개인사업자", "법인사업자"].map((j) => (
+                        <label key={j} style={{ position: "relative", cursor: "pointer" }}>
+                          <input type="radio" name="job" value={j} required style={{ position: "absolute", opacity: 0, pointerEvents: "none" }} />
+                          <div className="job-radio" style={{
+                            border: "1px solid #e5e5e5", borderRadius: 12, padding: "14px 8px",
+                            textAlign: "center", fontSize: 14, fontWeight: 600, color: "#666",
+                            transition: "all 0.2s", background: "#fff",
+                          }}>{j}</div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
                     <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>대출 종류 <span style={{ color: "#E8731A" }}>*</span></label>
                     <select name="loan_type" required style={{ ...inputStyle, appearance: "none" as const }}>
                       <option value="">대출 종류를 선택하세요</option>
@@ -223,6 +239,11 @@ export default function ApplyPage() {
         .step-connector { display: block; }
         @media (max-width: 900px) { .steps-grid { grid-template-columns: repeat(3, 1fr); gap: 40px; } .step-connector { display: none; } }
         @media (max-width: 500px) { .steps-grid { grid-template-columns: repeat(2, 1fr); } }
+        input[type="radio"]:checked + .job-radio {
+          border-color: #2ecc71 !important; background: rgba(46,204,113,0.06) !important;
+          color: #1e7a3c !important; box-shadow: 0 0 0 1px #2ecc71;
+        }
+        .job-radio:hover { border-color: #2ecc71 !important; }
       `}</style>
     </>
   );

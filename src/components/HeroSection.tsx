@@ -34,6 +34,7 @@ export default function HeroSection() {
       name: formData.get("name") as string,
       age: parseInt(formData.get("age") as string) || null,
       phone: formData.get("phone") as string,
+      job: formData.get("job") as string || null,
       loan_type: formData.get("loan_type") as string || null,
     });
     setLoading(false);
@@ -167,6 +168,13 @@ export default function HeroSection() {
                     <div>
                       <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 5 }}>연락처 *</label>
                       <input name="phone" type="tel" required style={inputStyle} placeholder="010-0000-0000" />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 5 }}>직업 *</label>
+                      <select name="job" required style={{ ...inputStyle, appearance: "none" as const }}>
+                        <option value="" style={{ background: "#1a4228" }}>선택하세요</option>
+                        {["무직자", "직장인", "개인사업자", "법인사업자"].map((j) => <option key={j} style={{ background: "#1a4228" }}>{j}</option>)}
+                      </select>
                     </div>
                     <div>
                       <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 5 }}>대출 종류 *</label>

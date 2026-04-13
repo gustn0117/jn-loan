@@ -8,6 +8,7 @@ type Consultation = {
   name: string;
   age: number | null;
   phone: string;
+  job: string | null;
   loan_type: string | null;
   amount: string | null;
   message: string | null;
@@ -127,6 +128,7 @@ export default function AdminPage() {
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 16, fontSize: 14 }}>
                     <div><span style={{ color: "#999" }}>연락처: </span><span style={{ color: "#1B7D3A", fontWeight: 600 }}>{c.phone}</span></div>
+                    {c.job && <div><span style={{ color: "#999" }}>직업: </span><span style={{ color: "#333" }}>{c.job}</span></div>}
                     {c.loan_type && <div><span style={{ color: "#999" }}>대출종류: </span><span style={{ color: "#333" }}>{c.loan_type}</span></div>}
                     {c.amount && <div><span style={{ color: "#999" }}>희망금액: </span><span style={{ color: "#333" }}>{c.amount}</span></div>}
                   </div>
