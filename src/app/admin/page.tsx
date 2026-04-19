@@ -60,6 +60,43 @@ export default function AdminPage() {
     setLimitChecks((prev) => prev.filter((l) => l.id !== id));
   }
 
+  function downloadCSV() {
+    const isConsultations = tab === "consultations";
+    const rows = isConsultations ? consultations : limitChecks;
+    if (rows.length === 0) { alert("다운로드할 데이터가 없습니다."); return; }
+
+    const headers = isConsultations
+      ? ["번호", "이름", "나이", "연락처", "직업", "대출종류", "희망금액", "상담내용", "신청일시"]
+      : ["번호", "이름", "연락처", "대출종류", "신청일시"];
+
+    const escape = (v: unknown) => {
+      const s = v === null || v === undefined ? "" : String(v);
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+
+    const body = rows.map((r) => {
+      const date = new Date(r.created_at).toLocaleString("ko-KR");
+      if (isConsultations) {
+        const c = r as Consultation;
+        return [c.id, c.name, c.age ?? "", c.phone, c.job ?? "", c.loan_type ?? "", c.amount ?? "", c.message ?? "", date].map(escape).join(",");
+      }
+      const l = r as LimitCheck;
+      return [l.id, l.name, l.phone, l.loan_type ?? "", date].map(escape).join(",");
+    });
+
+    const csv = "\ufeff" + [headers.map(escape).join(","), ...body].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const today = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `${isConsultations ? "상담신청" : "한도조회"}_${today}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   if (!authed) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f5f5f5" }}>
@@ -103,7 +140,11 @@ export default function AdminPage() {
           <button onClick={() => setTab("limit_checks")} style={{ padding: "10px 24px", borderRadius: 10, border: "none", fontSize: 14, fontWeight: 600, cursor: "pointer", background: tab === "limit_checks" ? "#1B7D3A" : "#fff", color: tab === "limit_checks" ? "#fff" : "#666" }}>
             무료 한도 조회 ({limitChecks.length})
           </button>
-          <button onClick={loadData} style={{ marginLeft: "auto", padding: "10px 20px", borderRadius: 10, border: "1px solid #ddd", fontSize: 13, cursor: "pointer", background: "#fff", color: "#666" }}>
+          <button onClick={downloadCSV} style={{ marginLeft: "auto", padding: "10px 20px", borderRadius: 10, border: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", background: "#1B7D3A", color: "#fff", display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            CSV 다운로드
+          </button>
+          <button onClick={loadData} style={{ padding: "10px 20px", borderRadius: 10, border: "1px solid #ddd", fontSize: 13, cursor: "pointer", background: "#fff", color: "#666" }}>
             새로고침
           </button>
         </div>
