@@ -29,6 +29,8 @@ export default function AdminPage() {
   const [tab, setTab] = useState<"consultations" | "limit_checks">("consultations");
   const [consultations, setConsultations] = useState<Consultation[]>([]);
   const [limitChecks, setLimitChecks] = useState<LimitCheck[]>([]);
+  const [selectedC, setSelectedC] = useState<Set<number>>(new Set());
+  const [selectedL, setSelectedL] = useState<Set<number>>(new Set());
 
   function login(e: React.FormEvent) {
     e.preventDefault();
@@ -52,12 +54,51 @@ export default function AdminPage() {
     if (!confirm("삭제하시겠습니까?")) return;
     await supabase.from("consultations").delete().eq("id", id);
     setConsultations((prev) => prev.filter((c) => c.id !== id));
+    setSelectedC((prev) => { const n = new Set(prev); n.delete(id); return n; });
   }
 
   async function deleteLimitCheck(id: number) {
     if (!confirm("삭제하시겠습니까?")) return;
     await supabase.from("limit_checks").delete().eq("id", id);
     setLimitChecks((prev) => prev.filter((l) => l.id !== id));
+    setSelectedL((prev) => { const n = new Set(prev); n.delete(id); return n; });
+  }
+
+  function toggleOne(id: number) {
+    if (tab === "consultations") {
+      setSelectedC((prev) => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+    } else {
+      setSelectedL((prev) => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+    }
+  }
+
+  function toggleAll() {
+    if (tab === "consultations") {
+      if (selectedC.size === consultations.length) setSelectedC(new Set());
+      else setSelectedC(new Set(consultations.map((c) => c.id)));
+    } else {
+      if (selectedL.size === limitChecks.length) setSelectedL(new Set());
+      else setSelectedL(new Set(limitChecks.map((l) => l.id)));
+    }
+  }
+
+  async function deleteSelected() {
+    const isC = tab === "consultations";
+    const ids = Array.from(isC ? selectedC : selectedL);
+    if (ids.length === 0) return;
+    if (!confirm(`선택한 ${ids.length}건을 삭제하시겠습니까?`)) return;
+
+    const table = isC ? "consultations" : "limit_checks";
+    const { error } = await supabase.from(table).delete().in("id", ids);
+    if (error) { alert("삭제 중 오류가 발생했습니다."); return; }
+
+    if (isC) {
+      setConsultations((prev) => prev.filter((c) => !selectedC.has(c.id)));
+      setSelectedC(new Set());
+    } else {
+      setLimitChecks((prev) => prev.filter((l) => !selectedL.has(l.id)));
+      setSelectedL(new Set());
+    }
   }
 
   function downloadCSV() {
@@ -133,7 +174,7 @@ export default function AdminPage() {
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 24px" }}>
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
           <button onClick={() => setTab("consultations")} style={{ padding: "10px 24px", borderRadius: 10, border: "none", fontSize: 14, fontWeight: 600, cursor: "pointer", background: tab === "consultations" ? "#1B7D3A" : "#fff", color: tab === "consultations" ? "#fff" : "#666" }}>
             대출 상담 신청 ({consultations.length})
           </button>
@@ -149,6 +190,45 @@ export default function AdminPage() {
           </button>
         </div>
 
+        {/* Selection bar */}
+        {(() => {
+          const total = tab === "consultations" ? consultations.length : limitChecks.length;
+          const selCount = tab === "consultations" ? selectedC.size : selectedL.size;
+          const allSelected = total > 0 && selCount === total;
+          if (total === 0) return null;
+          return (
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, background: "#fff", borderRadius: 12, padding: "12px 20px", border: "1px solid #eee" }}>
+              <label style={{ display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: "#333" }}>
+                <input type="checkbox" checked={allSelected} onChange={toggleAll} style={{ width: 18, height: 18, accentColor: "#1B7D3A", cursor: "pointer" }} />
+                전체선택
+              </label>
+              <span style={{ color: "#bbb", fontSize: 13 }}>|</span>
+              <span style={{ fontSize: 13, color: "#666" }}>선택: <strong style={{ color: "#1B7D3A" }}>{selCount}</strong>건</span>
+              <button
+                onClick={deleteSelected}
+                disabled={selCount === 0}
+                style={{
+                  marginLeft: "auto",
+                  padding: "8px 18px",
+                  borderRadius: 8,
+                  border: "none",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: selCount === 0 ? "not-allowed" : "pointer",
+                  background: selCount === 0 ? "#f0f0f0" : "#dc2626",
+                  color: selCount === 0 ? "#bbb" : "#fff",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+              >
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" /></svg>
+                선택 삭제
+              </button>
+            </div>
+          );
+        })()}
+
         {/* Content */}
         {tab === "consultations" ? (
           consultations.length === 0 ? (
@@ -156,10 +236,11 @@ export default function AdminPage() {
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {consultations.map((c) => (
-                <div key={c.id} style={{ background: "#fff", borderRadius: 16, padding: "24px 28px", border: "1px solid #eee" }}>
+                <div key={c.id} style={{ background: "#fff", borderRadius: 16, padding: "24px 28px", border: selectedC.has(c.id) ? "1px solid #1B7D3A" : "1px solid #eee", transition: "border-color 0.15s" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-                    <div>
-                      <span style={{ fontSize: 18, fontWeight: 700, color: "#111", marginRight: 12 }}>{c.name}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <input type="checkbox" checked={selectedC.has(c.id)} onChange={() => toggleOne(c.id)} style={{ width: 18, height: 18, accentColor: "#1B7D3A", cursor: "pointer" }} />
+                      <span style={{ fontSize: 18, fontWeight: 700, color: "#111" }}>{c.name}</span>
                       {c.age && <span style={{ fontSize: 14, color: "#999" }}>{c.age}세</span>}
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -184,8 +265,9 @@ export default function AdminPage() {
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {limitChecks.map((l) => (
-                <div key={l.id} style={{ background: "#fff", borderRadius: 16, padding: "24px 28px", border: "1px solid #eee", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <div style={{ display: "flex", gap: 24, fontSize: 14 }}>
+                <div key={l.id} style={{ background: "#fff", borderRadius: 16, padding: "24px 28px", border: selectedL.has(l.id) ? "1px solid #1B7D3A" : "1px solid #eee", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "border-color 0.15s" }}>
+                  <div style={{ display: "flex", gap: 20, alignItems: "center", fontSize: 14 }}>
+                    <input type="checkbox" checked={selectedL.has(l.id)} onChange={() => toggleOne(l.id)} style={{ width: 18, height: 18, accentColor: "#1B7D3A", cursor: "pointer" }} />
                     <span style={{ fontWeight: 700, color: "#111", fontSize: 16 }}>{l.name}</span>
                     <span style={{ color: "#1B7D3A", fontWeight: 600 }}>{l.phone}</span>
                     {l.loan_type && <span style={{ color: "#666" }}>{l.loan_type}</span>}
