@@ -18,7 +18,9 @@ type Consultation = {
 type LimitCheck = {
   id: number;
   name: string;
+  age: number | null;
   phone: string;
+  job: string | null;
   loan_type: string | null;
   created_at: string;
 };
@@ -108,7 +110,7 @@ export default function AdminPage() {
 
     const headers = isConsultations
       ? ["번호", "이름", "나이", "연락처", "직업", "대출종류", "희망금액", "상담내용", "신청일시"]
-      : ["번호", "이름", "연락처", "대출종류", "신청일시"];
+      : ["번호", "이름", "나이", "연락처", "직업", "대출종류", "신청일시"];
 
     const escape = (v: unknown) => {
       const s = v === null || v === undefined ? "" : String(v);
@@ -122,7 +124,7 @@ export default function AdminPage() {
         return [c.id, c.name, c.age ?? "", c.phone, c.job ?? "", c.loan_type ?? "", c.amount ?? "", c.message ?? "", date].map(escape).join(",");
       }
       const l = r as LimitCheck;
-      return [l.id, l.name, l.phone, l.loan_type ?? "", date].map(escape).join(",");
+      return [l.id, l.name, l.age ?? "", l.phone, l.job ?? "", l.loan_type ?? "", date].map(escape).join(",");
     });
 
     const csv = "\ufeff" + [headers.map(escape).join(","), ...body].join("\n");
@@ -266,10 +268,12 @@ export default function AdminPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {limitChecks.map((l) => (
                 <div key={l.id} style={{ background: "#fff", borderRadius: 16, padding: "24px 28px", border: selectedL.has(l.id) ? "1px solid #1B7D3A" : "1px solid #eee", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "border-color 0.15s" }}>
-                  <div style={{ display: "flex", gap: 20, alignItems: "center", fontSize: 14 }}>
+                  <div style={{ display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap", fontSize: 14 }}>
                     <input type="checkbox" checked={selectedL.has(l.id)} onChange={() => toggleOne(l.id)} style={{ width: 18, height: 18, accentColor: "#1B7D3A", cursor: "pointer" }} />
                     <span style={{ fontWeight: 700, color: "#111", fontSize: 16 }}>{l.name}</span>
+                    {l.age && <span style={{ color: "#999" }}>{l.age}세</span>}
                     <span style={{ color: "#1B7D3A", fontWeight: 600 }}>{l.phone}</span>
+                    {l.job && <span style={{ color: "#555" }}>{l.job}</span>}
                     {l.loan_type && <span style={{ color: "#666" }}>{l.loan_type}</span>}
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>

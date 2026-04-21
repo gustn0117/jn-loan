@@ -81,7 +81,9 @@ export default function LimitCheckPage() {
     const formData = new FormData(e.currentTarget);
     const { error } = await supabase.from("limit_checks").insert({
       name: formData.get("name") as string,
+      age: parseInt(formData.get("age") as string) || null,
       phone: formData.get("phone") as string,
+      job: formData.get("job") as string || null,
       loan_type: formData.get("loan_type") as string || null,
     });
     setLoading(false);
@@ -192,16 +194,23 @@ export default function LimitCheckPage() {
                     <input name="name" type="text" required style={inputStyle} placeholder="이름을 입력하세요" />
                   </div>
                   <div>
+                    <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>나이 <span style={{ color: "#E8731A" }}>*</span></label>
+                    <input name="age" type="number" required style={inputStyle} placeholder="나이를 입력하세요" min={20} max={99} />
+                  </div>
+                  <div>
                     <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>연락처 <span style={{ color: "#E8731A" }}>*</span></label>
                     <input name="phone" type="tel" required style={inputStyle} placeholder="010-0000-0000" />
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>나이</label>
-                    <input name="age" type="number" style={inputStyle} placeholder="나이를 입력하세요" min={20} max={99} />
+                    <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>직업 <span style={{ color: "#E8731A" }}>*</span></label>
+                    <select name="job" required style={{ ...inputStyle, appearance: "none" as const }}>
+                      <option value="">선택하세요</option>
+                      {["무직자", "직장인", "개인사업자", "법인사업자"].map((j) => <option key={j}>{j}</option>)}
+                    </select>
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>관심 대출 상품</label>
-                    <select name="loan_type" style={{ ...inputStyle, appearance: "none" as const }}>
+                    <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>대출 종류 <span style={{ color: "#E8731A" }}>*</span></label>
+                    <select name="loan_type" required style={{ ...inputStyle, appearance: "none" as const }}>
                       <option value="">선택하세요</option>
                       <option>자동차담보대출</option><option>전월세담보대출</option>
                       <option>무직자 대출</option><option>비상금대출</option>
