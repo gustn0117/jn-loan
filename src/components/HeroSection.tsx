@@ -38,8 +38,12 @@ export default function HeroSection() {
       loan_type: formData.get("loan_type") as string || null,
     });
     setLoading(false);
-    if (!error) setSubmitted(true);
-    else alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
+    if (!error) {
+      setSubmitted(true);
+      if (typeof window !== "undefined" && typeof (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag === "function") {
+        (window as unknown as { gtag: (...a: unknown[]) => void }).gtag("event", "conversion", { send_to: "AW-17996576930/nPAHCLPGt50cEKLxt4VD" });
+      }
+    } else alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
   }
 
   return (
