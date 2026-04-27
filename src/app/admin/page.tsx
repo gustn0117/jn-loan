@@ -25,8 +25,11 @@ type LimitCheck = {
   created_at: string;
 };
 
+const SESSION_KEY = "jn_admin_auth";
+
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const [pw, setPw] = useState("");
   const [tab, setTab] = useState<"consultations" | "limit_checks">("consultations");
   const [consultations, setConsultations] = useState<Consultation[]>([]);
@@ -34,10 +37,25 @@ export default function AdminPage() {
   const [selectedC, setSelectedC] = useState<Set<number>>(new Set());
   const [selectedL, setSelectedL] = useState<Set<number>>(new Set());
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY) === "1") {
+      setAuthed(true);
+    }
+    setHydrated(true);
+  }, []);
+
   function login(e: React.FormEvent) {
     e.preventDefault();
-    if (pw === "1234") setAuthed(true);
-    else alert("비밀번호가 틀렸습니다.");
+    if (pw === "1234") {
+      sessionStorage.setItem(SESSION_KEY, "1");
+      setAuthed(true);
+    } else alert("비밀번호가 틀렸습니다.");
+  }
+
+  function logout() {
+    sessionStorage.removeItem(SESSION_KEY);
+    setAuthed(false);
+    setPw("");
   }
 
   useEffect(() => {
@@ -140,6 +158,10 @@ export default function AdminPage() {
     URL.revokeObjectURL(url);
   }
 
+  if (!hydrated) {
+    return <div style={{ minHeight: "100vh", background: "#f5f5f5" }} />;
+  }
+
   if (!authed) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f5f5f5" }}>
@@ -170,7 +192,7 @@ export default function AdminPage() {
       <div style={{ background: "#fff", borderBottom: "1px solid #eee", padding: "16px 0" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1 style={{ fontSize: 18, fontWeight: 800, color: "#111" }}>제이앤대부 관리자</h1>
-          <button onClick={() => setAuthed(false)} style={{ background: "none", border: "1px solid #ddd", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer", color: "#666" }}>로그아웃</button>
+          <button onClick={logout} style={{ background: "none", border: "1px solid #ddd", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer", color: "#666" }}>로그아웃</button>
         </div>
       </div>
 
