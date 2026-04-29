@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 
 const loanTypes = [
   { name: "자동차담보대출", headline: "차량이 있다면\n담보 설정으로 유리한 조건", highlight: "담보 설정으로", desc: "차량이 있다면 담보 설정으로 비교적 유리한 조건으로 이용 가능합니다. 빠른 심사와 당일 승인으로 급한 자금이 필요할 때 편리하게 이용하실 수 있습니다.", icon: "M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" },
@@ -30,13 +29,19 @@ export default function HeroSection() {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    const { error } = await supabase.from("consultations").insert({
-      name: formData.get("name") as string,
-      age: parseInt(formData.get("age") as string) || null,
-      phone: formData.get("phone") as string,
-      job: formData.get("job") as string || null,
-      loan_type: formData.get("loan_type") as string || null,
+    const res = await fetch("/api/consultations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.get("name"),
+        age: parseInt(formData.get("age") as string) || null,
+        phone: formData.get("phone"),
+        job: formData.get("job") || null,
+        loan_type: formData.get("loan_type") || null,
+      }),
     });
+    const json = await res.json().catch(() => ({ ok: false }));
+    const error = json.ok ? null : { message: json.error || "failed" };
     setLoading(false);
     if (!error) {
       setSubmitted(true);

@@ -3,7 +3,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 
 const steps = [
   { num: "01", title: "대출 상담 신청", icon: "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" },
@@ -80,15 +79,21 @@ export default function ApplyPage() {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    const { error } = await supabase.from("consultations").insert({
-      name: formData.get("name") as string,
-      age: parseInt(formData.get("age") as string) || null,
-      phone: formData.get("phone") as string,
-      job: formData.get("job") as string || null,
-      loan_type: formData.get("loan_type") as string || null,
-      amount: formData.get("amount") as string || null,
-      message: formData.get("message") as string || null,
+    const res = await fetch("/api/consultations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.get("name"),
+        age: parseInt(formData.get("age") as string) || null,
+        phone: formData.get("phone"),
+        job: formData.get("job") || null,
+        loan_type: formData.get("loan_type") || null,
+        amount: formData.get("amount") || null,
+        message: formData.get("message") || null,
+      }),
     });
+    const json = await res.json().catch(() => ({ ok: false }));
+    const error = json.ok ? null : { message: json.error || "failed" };
     setLoading(false);
     if (!error) {
       setSubmitted(true);

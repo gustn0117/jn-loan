@@ -3,7 +3,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 
 const products = [
   { name: "자동차담보대출", id: "auto", limit: "최대 5,000만원", rate: "연5%~연20% 이내", period: "최대 120개월", icon: "M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" },
@@ -79,13 +78,19 @@ export default function LimitCheckPage() {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    const { error } = await supabase.from("limit_checks").insert({
-      name: formData.get("name") as string,
-      age: parseInt(formData.get("age") as string) || null,
-      phone: formData.get("phone") as string,
-      job: formData.get("job") as string || null,
-      loan_type: formData.get("loan_type") as string || null,
+    const res = await fetch("/api/limit-checks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.get("name"),
+        age: parseInt(formData.get("age") as string) || null,
+        phone: formData.get("phone"),
+        job: formData.get("job") || null,
+        loan_type: formData.get("loan_type") || null,
+      }),
     });
+    const json = await res.json().catch(() => ({ ok: false }));
+    const error = json.ok ? null : { message: json.error || "failed" };
     setLoading(false);
     if (!error) setSubmitted(true);
     else alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");

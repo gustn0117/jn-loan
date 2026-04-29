@@ -12,6 +12,7 @@ type Consultation = {
   loan_type: string | null;
   amount: string | null;
   message: string | null;
+  ip_address: string | null;
   created_at: string;
 };
 
@@ -22,6 +23,7 @@ type LimitCheck = {
   phone: string;
   job: string | null;
   loan_type: string | null;
+  ip_address: string | null;
   created_at: string;
 };
 
@@ -36,6 +38,7 @@ export default function AdminPage() {
   const [limitChecks, setLimitChecks] = useState<LimitCheck[]>([]);
   const [selectedC, setSelectedC] = useState<Set<number>>(new Set());
   const [selectedL, setSelectedL] = useState<Set<number>>(new Set());
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY) === "1") {
@@ -121,14 +124,27 @@ export default function AdminPage() {
     }
   }
 
+  function matchSearch(r: Consultation | LimitCheck): boolean {
+    const q = search.trim().toLowerCase();
+    if (!q) return true;
+    const fields: (string | number | null)[] = [
+      r.id, r.name, r.age, r.phone, r.job, r.loan_type, r.ip_address,
+      ...(("amount" in r) ? [r.amount, r.message] : []),
+    ];
+    return fields.some((v) => v !== null && v !== undefined && String(v).toLowerCase().includes(q));
+  }
+
+  const filteredC = consultations.filter(matchSearch);
+  const filteredL = limitChecks.filter(matchSearch);
+
   function downloadCSV() {
     const isConsultations = tab === "consultations";
-    const rows = isConsultations ? consultations : limitChecks;
+    const rows = isConsultations ? filteredC : filteredL;
     if (rows.length === 0) { alert("다운로드할 데이터가 없습니다."); return; }
 
     const headers = isConsultations
-      ? ["번호", "이름", "나이", "연락처", "직업", "대출종류", "희망금액", "상담내용", "신청일시"]
-      : ["번호", "이름", "나이", "연락처", "직업", "대출종류", "신청일시"];
+      ? ["번호", "이름", "나이", "연락처", "직업", "대출종류", "희망금액", "상담내용", "IP", "신청일시"]
+      : ["번호", "이름", "나이", "연락처", "직업", "대출종류", "IP", "신청일시"];
 
     const escape = (v: unknown) => {
       const s = v === null || v === undefined ? "" : String(v);
@@ -139,10 +155,10 @@ export default function AdminPage() {
       const date = new Date(r.created_at).toLocaleString("ko-KR");
       if (isConsultations) {
         const c = r as Consultation;
-        return [c.id, c.name, c.age ?? "", c.phone, c.job ?? "", c.loan_type ?? "", c.amount ?? "", c.message ?? "", date].map(escape).join(",");
+        return [c.id, c.name, c.age ?? "", c.phone, c.job ?? "", c.loan_type ?? "", c.amount ?? "", c.message ?? "", c.ip_address ?? "", date].map(escape).join(",");
       }
       const l = r as LimitCheck;
-      return [l.id, l.name, l.age ?? "", l.phone, l.job ?? "", l.loan_type ?? "", date].map(escape).join(",");
+      return [l.id, l.name, l.age ?? "", l.phone, l.job ?? "", l.loan_type ?? "", l.ip_address ?? "", date].map(escape).join(",");
     });
 
     const csv = "\ufeff" + [headers.map(escape).join(","), ...body].join("\n");
@@ -214,6 +230,21 @@ export default function AdminPage() {
           </button>
         </div>
 
+        {/* Search bar */}
+        <div style={{ position: "relative", marginBottom: 16 }}>
+          <svg width="18" height="18" fill="none" stroke="#999" viewBox="0 0 24 24" style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="이름, 연락처, 직업, 대출종류, IP, 메시지 검색…"
+            style={{ width: "100%", border: "1px solid #eee", borderRadius: 12, padding: "12px 16px 12px 44px", fontSize: 14, outline: "none", background: "#fff" }}
+          />
+          {search && (
+            <button onClick={() => setSearch("")} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#bbb", cursor: "pointer", fontSize: 18, lineHeight: 1 }}>×</button>
+          )}
+        </div>
+
         {/* Selection bar */}
         {(() => {
           const total = tab === "consultations" ? consultations.length : limitChecks.length;
@@ -257,9 +288,11 @@ export default function AdminPage() {
         {tab === "consultations" ? (
           consultations.length === 0 ? (
             <div style={{ background: "#fff", borderRadius: 16, padding: "64px 0", textAlign: "center", color: "#ccc", border: "1px solid #eee" }}>아직 신청이 없습니다</div>
+          ) : filteredC.length === 0 ? (
+            <div style={{ background: "#fff", borderRadius: 16, padding: "64px 0", textAlign: "center", color: "#ccc", border: "1px solid #eee" }}>검색 결과가 없습니다</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {consultations.map((c) => (
+              {filteredC.map((c) => (
                 <div key={c.id} style={{ background: "#fff", borderRadius: 16, padding: "24px 28px", border: selectedC.has(c.id) ? "1px solid #1B7D3A" : "1px solid #eee", transition: "border-color 0.15s" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -277,6 +310,7 @@ export default function AdminPage() {
                     {c.job && <div><span style={{ color: "#999" }}>직업: </span><span style={{ color: "#333" }}>{c.job}</span></div>}
                     {c.loan_type && <div><span style={{ color: "#999" }}>대출종류: </span><span style={{ color: "#333" }}>{c.loan_type}</span></div>}
                     {c.amount && <div><span style={{ color: "#999" }}>희망금액: </span><span style={{ color: "#333" }}>{c.amount}</span></div>}
+                    {c.ip_address && <div><span style={{ color: "#999" }}>IP: </span><span style={{ color: "#666", fontFamily: "monospace", fontSize: 13 }}>{c.ip_address}</span></div>}
                   </div>
                   {c.message && <p style={{ marginTop: 12, padding: "12px 16px", background: "#f9f9f9", borderRadius: 10, fontSize: 14, color: "#555", lineHeight: 1.6 }}>{c.message}</p>}
                 </div>
@@ -286,9 +320,11 @@ export default function AdminPage() {
         ) : (
           limitChecks.length === 0 ? (
             <div style={{ background: "#fff", borderRadius: 16, padding: "64px 0", textAlign: "center", color: "#ccc", border: "1px solid #eee" }}>아직 조회 신청이 없습니다</div>
+          ) : filteredL.length === 0 ? (
+            <div style={{ background: "#fff", borderRadius: 16, padding: "64px 0", textAlign: "center", color: "#ccc", border: "1px solid #eee" }}>검색 결과가 없습니다</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {limitChecks.map((l) => (
+              {filteredL.map((l) => (
                 <div key={l.id} style={{ background: "#fff", borderRadius: 16, padding: "24px 28px", border: selectedL.has(l.id) ? "1px solid #1B7D3A" : "1px solid #eee", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "border-color 0.15s" }}>
                   <div style={{ display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap", fontSize: 14 }}>
                     <input type="checkbox" checked={selectedL.has(l.id)} onChange={() => toggleOne(l.id)} style={{ width: 18, height: 18, accentColor: "#1B7D3A", cursor: "pointer" }} />
@@ -297,6 +333,7 @@ export default function AdminPage() {
                     <span style={{ color: "#1B7D3A", fontWeight: 600 }}>{l.phone}</span>
                     {l.job && <span style={{ color: "#555" }}>{l.job}</span>}
                     {l.loan_type && <span style={{ color: "#666" }}>{l.loan_type}</span>}
+                    {l.ip_address && <span style={{ color: "#999", fontFamily: "monospace", fontSize: 13 }}>{l.ip_address}</span>}
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span style={{ fontSize: 12, color: "#bbb" }}>{new Date(l.created_at).toLocaleString("ko-KR")}</span>
