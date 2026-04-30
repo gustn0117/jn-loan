@@ -38,6 +38,7 @@ export default function HeroSection() {
         phone: formData.get("phone"),
         job: formData.get("job") || null,
         loan_type: formData.get("loan_type") || null,
+        website: formData.get("website") || "",
       }),
     });
     const json = await res.json().catch(() => ({ ok: false }));
@@ -164,6 +165,7 @@ export default function HeroSection() {
                     <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>전문 상담사가 연락드립니다</p>
                   </div>
                   <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} aria-hidden="true" />
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                       <div>
                         <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 5 }}>이름 *</label>

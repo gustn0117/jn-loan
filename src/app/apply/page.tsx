@@ -90,6 +90,7 @@ export default function ApplyPage() {
         loan_type: formData.get("loan_type") || null,
         amount: formData.get("amount") || null,
         message: formData.get("message") || null,
+        website: formData.get("website") || "",
       }),
     });
     const json = await res.json().catch(() => ({ ok: false }));
@@ -184,6 +185,7 @@ export default function ApplyPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} style={{ background: "#fff", borderRadius: 24, padding: "52px 44px", border: "1px solid rgba(0,0,0,0.04)", boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}>
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} aria-hidden="true" />
                 <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
                   {[
                     { name: "name", label: "이름", type: "text", placeholder: "이름을 입력하세요", required: true },

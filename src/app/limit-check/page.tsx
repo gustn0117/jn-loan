@@ -87,6 +87,7 @@ export default function LimitCheckPage() {
         phone: formData.get("phone"),
         job: formData.get("job") || null,
         loan_type: formData.get("loan_type") || null,
+        website: formData.get("website") || "",
       }),
     });
     const json = await res.json().catch(() => ({ ok: false }));
@@ -193,6 +194,7 @@ export default function LimitCheckPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} style={{ background: "#fff", borderRadius: 24, padding: "52px 44px", border: "1px solid rgba(0,0,0,0.04)", boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}>
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} aria-hidden="true" />
                 <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
                   <div>
                     <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#333", marginBottom: 8 }}>이름 <span style={{ color: "#E8731A" }}>*</span></label>
