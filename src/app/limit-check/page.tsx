@@ -94,7 +94,11 @@ export default function LimitCheckPage() {
     const error = json.ok ? null : { message: json.error || "failed" };
     setLoading(false);
     if (!error) setSubmitted(true);
-    else alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
+    else if (res.status === 429) {
+      if (json.error === "duplicate") alert("이미 신청 내역이 있습니다. 잠시 후 다시 시도해주세요.");
+      else if (json.error === "daily limit exceeded") alert("일일 신청 한도를 초과했습니다. 24시간 후 다시 시도해주세요.");
+      else alert("요청이 너무 많습니다. 잠시 후 다시 시도해주세요.");
+    } else alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
   }
 
   return (

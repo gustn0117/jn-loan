@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { supabase } from "@/lib/supabase";
 import {
   getClientIp, checkOrigin, isSuspicious, isValidPhone, isValidName,
-  isAllowedJob, isAllowedLoanType, rateLimitOk,
+  isAllowedJob, isAllowedLoanType, rateLimitOk, checkDailyIpLimit, isDuplicateRecent,
 } from "@/lib/security";
 
 export const runtime = "nodejs";
@@ -41,6 +41,15 @@ export async function POST(req: NextRequest) {
   if (age !== null && (age < 18 || age > 100)) return Response.json({ ok: false, error: "invalid age" }, { status: 400 });
   if (isSuspicious(name) || isSuspicious(phone)) {
     return Response.json({ ok: false, error: "invalid input" }, { status: 400 });
+  }
+
+  const daily = await checkDailyIpLimit(ip);
+  if (!daily.ok) {
+    return Response.json({ ok: false, error: "daily limit exceeded" }, { status: 429 });
+  }
+
+  if (await isDuplicateRecent(ip, phone, "limit_checks")) {
+    return Response.json({ ok: false, error: "duplicate" }, { status: 429 });
   }
 
   const { error } = await supabase.from("limit_checks").insert({

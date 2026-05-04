@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { supabase } from "@/lib/supabase";
 import {
   getClientIp, checkOrigin, isSuspicious, isValidPhone, isValidName,
-  isAllowedJob, isAllowedLoanType, rateLimitOk,
+  isAllowedJob, isAllowedLoanType, rateLimitOk, checkDailyIpLimit, isDuplicateRecent,
 } from "@/lib/security";
 
 export const runtime = "nodejs";
@@ -47,6 +47,15 @@ export async function POST(req: NextRequest) {
   }
   if (amount.length > 50 || message.length > 2000) {
     return Response.json({ ok: false, error: "too long" }, { status: 400 });
+  }
+
+  const daily = await checkDailyIpLimit(ip);
+  if (!daily.ok) {
+    return Response.json({ ok: false, error: "daily limit exceeded" }, { status: 429 });
+  }
+
+  if (await isDuplicateRecent(ip, phone, "consultations")) {
+    return Response.json({ ok: false, error: "duplicate" }, { status: 429 });
   }
 
   const { error } = await supabase.from("consultations").insert({

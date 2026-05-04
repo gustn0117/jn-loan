@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { supabase } from "@/lib/supabase";
 
 export function getClientIp(req: NextRequest): string | null {
   const cf = req.headers.get("cf-connecting-ip");
@@ -74,4 +75,36 @@ export function rateLimitOk(ip: string | null): boolean {
   if (last && now - last < RATE_WINDOW_MS) return false;
   recent.set(ip, now);
   return true;
+}
+
+const DAILY_IP_LIMIT = 3;
+const DAILY_WINDOW_HOURS = 24;
+
+export async function checkDailyIpLimit(ip: string | null): Promise<{ ok: boolean; count: number }> {
+  if (!ip) return { ok: true, count: 0 };
+  const since = new Date(Date.now() - DAILY_WINDOW_HOURS * 60 * 60 * 1000).toISOString();
+  const [c, l] = await Promise.all([
+    supabase.from("consultations").select("id", { count: "exact", head: true }).eq("ip_address", ip).gte("created_at", since),
+    supabase.from("limit_checks").select("id", { count: "exact", head: true }).eq("ip_address", ip).gte("created_at", since),
+  ]);
+  const total = (c.count ?? 0) + (l.count ?? 0);
+  return { ok: total < DAILY_IP_LIMIT, count: total };
+}
+
+export async function isDuplicateRecent(ip: string | null, phone: string, table: "consultations" | "limit_checks"): Promise<boolean> {
+  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const normalizedPhone = phone.replace(/[^0-9]/g, "");
+  if (!normalizedPhone) return false;
+
+  const filters: string[] = [];
+  if (ip) filters.push(`ip_address.eq.${ip}`);
+  filters.push(`phone.eq.${phone}`);
+  filters.push(`phone.eq.${normalizedPhone}`);
+
+  const { count } = await supabase
+    .from(table)
+    .select("id", { count: "exact", head: true })
+    .or(filters.join(","))
+    .gte("created_at", since);
+  return (count ?? 0) > 0;
 }
