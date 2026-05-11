@@ -49,7 +49,7 @@ export default function AdminPage() {
 
   function login(e: React.FormEvent) {
     e.preventDefault();
-    if (pw === "1234") {
+    if (pw === "7955") {
       sessionStorage.setItem(SESSION_KEY, "1");
       setAuthed(true);
     } else alert("비밀번호가 틀렸습니다.");
